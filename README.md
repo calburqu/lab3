@@ -5,6 +5,13 @@ Token docker hub
 
 - dckr_pat_l4SPDYfF3Kl0ILMz6eTm_OCVbC0
 
+# Datos github
+Token github
+
+- docker login -u calburqu ghcr.io
+
+- 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
+
 # Dockerfile
 
 Para compilar la imagen del Dockerfile:
