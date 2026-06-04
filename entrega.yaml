@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: ns-cesar-alburquenque
+  labels:
+    app: lab3
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-cesar-alburquenque
+  namespace: ns-cesar-alburquenque
+data:
+  AMBIENTE: ambiente_lab3
+  APP_VERSION: 3.0.0
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret-cesar-alburquenque
+  namespace: ns-cesar-alburquenque
+type: Opaque
+stringData:
+  API_KEY: valor_api_key_lab3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-cesar-alburquenque
+  namespace: ns-cesar-alburquenque
+  labels:
+    app: lab3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lab3
+  template:
+    metadata:
+      labels:
+         app: lab3
+    spec:
+#      imagePullSecrets:
+#        - name: regcred
+      containers:
+        - name: lab3
+          image: docker.io/calburqu/lab3:latest
+
+          imagePullPolicy: Always
+          env:
+            - name: AMBIENTE
+              valueFrom:
+                configMapKeyRef:
+                  name: config-cesar-alburquenque
+                  key: AMBIENTE
+            - name: APP_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: config-cesar-alburquenque
+                  key: APP_VERSION
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret-cesar-alburquenque
+                  key: API_KEY
+          ports:
+            - containerPort: 3000
+#          resources:
+#            requests:
+#              cpu: "100m"
+#              memory: "128Mi"
+#            limits:
+#              cpu: "500m"
+#              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-cesar-alburquenque
+  namespace: ns-cesar-alburquenque
+  labels:
+    app: lab3
+spec:
+  type: ClusterIP
+  selector:
+    app: lab3
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
