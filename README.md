@@ -65,3 +65,6 @@ Para revisar el log del deployment
 Para revisar las variables de ambiente
 
 - kubectl exec deployment/app-cesar-alburquenque -n ns-cesar-alburquenque -- printenv
+
+
+vvv
