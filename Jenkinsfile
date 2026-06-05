@@ -11,7 +11,10 @@ pipeline {
             stages{
                 stage('CI - Instalacion de dependencias'){
                     steps{
-                        sh "docker --config ~/.docker-anon pull ghcr.io/pnpm/pnpm:latest"
+                        sh '''
+                            security -v unlock-keychain -p "kl154676775" ~/Library/Keychains/login.keychain-db
+                            docker pull ghcr.io/pnpm/pnpm:latest
+                        '''
                         sh '''
                             pnpm install
                         '''                    
