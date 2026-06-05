@@ -40,5 +40,14 @@ pipeline {
                 }
             }
         }
+        stage('CD - empaquetado y distribucion') {
+            agent { label 'docker'}
+            steps{
+                sh '''
+                    docker build -t lab3 .
+                '''
+            }
+
+        }
     }
 }
