@@ -44,7 +44,7 @@ spec:
         }
         stage("Cuarto paso paso pipeline") {
             agent { label 'wsl'}
-            }
+
             tools {
                 nodejs 'node22'
             }
@@ -53,5 +53,4 @@ spec:
             }
         }                
     }
-
 }
