@@ -1,5 +1,10 @@
 pipeline {
     agent none
+    environment{
+        IMAGE_NAME = 'lab3'
+        DH_REPO = 'calburqu/lab3'
+        GH_REPO = 'ghcr.io/calburqu/lab3'
+    }
     stages {
         stage('CI - de nuestra aplicacion de contenedores') {
             agent{
@@ -31,6 +36,13 @@ pipeline {
                         '''                    
                     }
                 }
+                stage('CI - test'){
+                    steps {
+                        sh '''
+                            pnpm test
+                        '''
+                    }
+                }                
                 stage('CI - ejecucion de build'){
                     steps{
                         sh '''
@@ -44,8 +56,18 @@ pipeline {
             agent { label 'docker'}
             steps{
                 sh '''
-                    docker build -t lab3 .
+                    docker build -t ${IMAGE_NAME} .
+                    docker tag ${IMAGE_NAME} ${DH_REPO}
+                    docker tag ${IMAGE_NAME} ${GH_REPO}
                 '''
+                script{
+                    docker.withRegistry('docker.io','dh-credencial'){
+                        sh 'docker push ${DH_REPO}'
+                    }
+                    docker.withRegistry('ghcr.io','gh-credencial'){
+                        sh 'docker push ${GH_REPO}'
+                    }
+                }
             }
 
         }
