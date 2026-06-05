@@ -11,6 +11,7 @@ pipeline {
             stages{
                 stage('CI - Instalacion de dependencias'){
                     steps{
+                        sh "docker --config ~/.docker-anon pull ghcr.io/pnpm/pnpm:latest"
                         sh '''
                             pnpm install
                         '''                    
