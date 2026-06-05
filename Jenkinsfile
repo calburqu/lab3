@@ -12,11 +12,8 @@ pipeline {
                 stage('CI - Instalacion de dependencias'){
                     steps{
                         sh '''
-                            KEYCHAIN_PASS="kl154676775"
-                            security -v unlock-keychain -p "$KEYCHAIN_PASS" ~/Library/Keychains/login.keychain-db
-                            security set-keychain-settings -t 3600 -u ~/Library/Keychains/login.keychain-db
-                        '''
-                        sh '''
+                            pnpm runtime set node 24 -g
+                            pnpm --version
                             pnpm install
                         '''                    
                     }
