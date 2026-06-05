@@ -56,16 +56,16 @@ pipeline {
             agent { label 'docker'}
             steps{
                 sh '''
-                    docker build -t ${IMAGE_NAME} .
-                    docker tag ${IMAGE_NAME} ${DH_REPO}
-                    docker tag ${IMAGE_NAME} ${GH_REPO}
+                    docker build -t ${IMAGE_NAME}:latest .
+                    docker tag ${IMAGE_NAME}:latest ${DH_REPO}:latest
+                    docker tag ${IMAGE_NAME}:latest ${GH_REPO}:latest
                 '''
                 script{
-                    docker.withRegistry('https://index.docker.io','dh-credencial'){
-                        sh 'docker push ${DH_REPO}'
+                    docker.withRegistry('https://index.docker.io/v1/','dh-credencial'){
+                        sh 'docker push ${DH_REPO}:latest'
                     }
                     docker.withRegistry('https://ghcr.io','gh-credencial'){
-                        sh 'docker push ${GH_REPO}'
+                        sh 'docker push ${GH_REPO}:latest'
                     }
                 }
             }
