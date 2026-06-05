@@ -61,10 +61,10 @@ pipeline {
                     docker tag ${IMAGE_NAME} ${GH_REPO}
                 '''
                 script{
-                    docker.withRegistry('docker.io','dh-credencial'){
+                    docker.withRegistry('https://index.docker.io','dh-credencial'){
                         sh 'docker push ${DH_REPO}'
                     }
-                    docker.withRegistry('ghcr.io','gh-credencial'){
+                    docker.withRegistry('https://ghcr.io','gh-credencial'){
                         sh 'docker push ${GH_REPO}'
                     }
                 }
