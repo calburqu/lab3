@@ -9,12 +9,32 @@ pipeline {
                 }
             }
             stages{
-                stage('CI - Instalacion de dependencias'){
+                stage('CI - configuracion de pnpm y node'){
                     steps{
                         sh '''
                             pnpm runtime set node 24 -g
                             pnpm --version
+                        '''                    
+                    }
+                }
+                stage('CI - instalacion de dependencias'){
+                    steps{
+                        sh '''
                             pnpm install
+                        '''                    
+                    }
+                }
+                stage('CI - revision de linter'){
+                    steps{
+                        sh '''
+                            pnpm lint
+                        '''                    
+                    }
+                }
+                stage('CI - ejecucion de build'){
+                    steps{
+                        sh '''
+                            pnpm build
                         '''                    
                     }
                 }
