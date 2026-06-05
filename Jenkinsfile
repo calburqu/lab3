@@ -12,8 +12,9 @@ pipeline {
                 stage('CI - Instalacion de dependencias'){
                     steps{
                         sh '''
-                            security -v unlock-keychain -p "kl154676775" ~/Library/Keychains/login.keychain-db
-                            docker pull ghcr.io/pnpm/pnpm:latest
+                            KEYCHAIN_PASS="kl154676775"
+                            security -v unlock-keychain -p "$KEYCHAIN_PASS" ~/Library/Keychains/login.keychain-db
+                            security set-keychain-settings -t 3600 -u ~/Library/Keychains/login.keychain-db
                         '''
                         sh '''
                             pnpm install
