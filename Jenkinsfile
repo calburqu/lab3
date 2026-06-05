@@ -43,11 +43,10 @@ spec:
             }
         }
         stage("Cuarto paso paso pipeline") {
-            agent {
-                docker {
-                    image 'node:22'
-                    label 'wsl'
-                }
+            agent { label 'wsl'}
+            }
+            tools {
+                nodejs 'node22'
             }
             steps{
                 sh 'node --version'
