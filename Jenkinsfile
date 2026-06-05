@@ -8,16 +8,15 @@ pipeline {
                     label 'docker'
                 }
             }
-        }
-        stages{
-            stage('CI - Instalacion de dependencias'){
-                steps{
-                    sh '''
-                        pnpm install
-                    '''                    
+            stages{
+                stage('CI - Instalacion de dependencias'){
+                    steps{
+                        sh '''
+                            pnpm install
+                        '''                    
+                    }
                 }
             }
         }
-
     }
 }
