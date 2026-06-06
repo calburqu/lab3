@@ -102,6 +102,7 @@ spec:
                             echo "$DH_PASSWORD" | docker login -u "$DH_USER" --password-stdin
                             docker push ${DH_REPO}:latest
                             
+                            docker logout ghcr.io
                             echo "$GH_PASSWORD" | docker login -u "$GH_USER" ghcr.io --password-stdin
                             docker push ${GH_REPO}:latest
                         '''
