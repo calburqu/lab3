@@ -10,7 +10,7 @@ Token github
 
 - docker login -u calburqu ghcr.io
 
-- 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
+- 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
 
 # Dockerfile
 
