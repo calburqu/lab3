@@ -71,5 +71,16 @@ pipeline {
             }
 
         }
+        stage('CD - despliegue en k8'){
+            agent {
+                docker {
+                    image 'alpine/k8s:1.34.1'
+                }                
+            }
+            steps {
+                sh 'kubectl version'
+            }
+
+        }
     }
 }
