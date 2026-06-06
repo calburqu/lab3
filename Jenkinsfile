@@ -86,25 +86,32 @@ spec:
             }
             steps {
                 container('docker-cli') {
-                    // 1. Construcción de imágenes
                     sh '''
                         docker build -t ${IMAGE_NAME}:latest .
                         docker tag ${IMAGE_NAME}:latest ${DH_REPO}:latest
                         docker tag ${IMAGE_NAME}:latest ${GH_REPO}:latest
                     '''
                     
-                    // 2. Login y Push Manual (Evita el fallo de docker.withRegistry en K8s)
                     withCredentials([
                         usernamePassword(credentialsId: 'dh-credencial', usernameVariable: 'DH_USER', passwordVariable: 'DH_PASSWORD'),
                         usernamePassword(credentialsId: 'gh-credencial', usernameVariable: 'GH_USER', passwordVariable: 'GH_PASSWORD')
                     ]) {
                         sh '''
+                            # Docker Hub Login y Push
                             echo "$DH_PASSWORD" | docker login -u "$DH_USER" --password-stdin
                             docker push ${DH_REPO}:latest
                             
-                            docker logout ghcr.io
+                            # Forzar cierre de sesión previo e iniciar con entorno limpio para GHCR
+                            docker logout ghcr.io || true
+                            
+                            # Crear un archivo de configuración temporal de Docker aislado para este comando
+                            export DOCKER_CONFIG=\$(mktemp -d)
+                            
                             echo "$GH_PASSWORD" | docker login -u "$GH_USER" ghcr.io --password-stdin
                             docker push ${GH_REPO}:latest
+                            
+                            # Limpieza del entorno temporal
+                            rm -rf \$DOCKER_CONFIG
                         '''
                     }
                 }
