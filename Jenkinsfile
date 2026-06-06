@@ -6,7 +6,7 @@ pipeline {
         GH_REPO    = 'ghcr.io/calburqu/lab3'
     }
     stages {
-        stage('CI - de nuestra aplicacion de contenedores') {
+        stage('CI - Preparando ambiente') {
             agent {
                 kubernetes {
                     yaml '''
@@ -23,16 +23,6 @@ spec:
                 PATH = "/pnpm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
             }            
             stages {
-                // stage('CI - configuracion de pnpm y node') {
-                //     steps {
-                //         container('pnpm') {
-                //             sh '''
-                //                 pnpm runtime set node 24 -g
-                //                 pnpm --version
-                //             '''
-                //         }
-                //     }
-                // }
                 stage('CI - Install') {
                     steps {
                         container('pnpm') {
@@ -43,13 +33,6 @@ spec:
                         }
                     }
                 }
-                // stage('CI - revision de linter') {
-                //     steps {
-                //         container('pnpm') {
-                //             sh 'pnpm lint'
-                //         }
-                //     }
-                // }
                 stage('CI - Test') {
                     steps {
                         container('pnpm') {
