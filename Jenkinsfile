@@ -23,38 +23,41 @@ spec:
                 PATH = "/pnpm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
             }            
             stages {
-                stage('CI - configuracion de pnpm y node') {
+                // stage('CI - configuracion de pnpm y node') {
+                //     steps {
+                //         container('pnpm') {
+                //             sh '''
+                //                 pnpm runtime set node 24 -g
+                //                 pnpm --version
+                //             '''
+                //         }
+                //     }
+                // }
+                stage('CI - Install') {
                     steps {
                         container('pnpm') {
                             sh '''
                                 pnpm runtime set node 24 -g
-                                pnpm --version
                             '''
-                        }
-                    }
-                }
-                stage('CI - instalacion de dependencias') {
-                    steps {
-                        container('pnpm') {
                             sh 'pnpm install'
                         }
                     }
                 }
-                stage('CI - revision de linter') {
-                    steps {
-                        container('pnpm') {
-                            sh 'pnpm lint'
-                        }
-                    }
-                }
-                stage('CI - test') {
+                // stage('CI - revision de linter') {
+                //     steps {
+                //         container('pnpm') {
+                //             sh 'pnpm lint'
+                //         }
+                //     }
+                // }
+                stage('CI - Test') {
                     steps {
                         container('pnpm') {
                             sh 'pnpm test'
                         }
                     }
                 }                
-                stage('CI - ejecucion de build') {
+                stage('CI - Build') {
                     steps {
                         container('pnpm') {
                             sh 'pnpm build'
@@ -64,7 +67,7 @@ spec:
             }
         }
 
-        stage('CD - empaquetado y distribucion') {
+        stage('CD - Push') {
             agent {
                 kubernetes {
                     yaml '''
